@@ -1,13 +1,13 @@
 services:
   # Development service with hot-reloading
-  ${APP_NAME}-dev:
+  app-dev:
     build: 
-      context: ../..
-      dockerfile: docker/development/Dockerfile.dev
+      context: ../../
+      dockerfile: docker-front/development/Dockerfile.dev
     ports:
       - "${DEV_PORT:-3000}:${DEV_PORT:-3000}"
     volumes:
-      - ../..:/app
+      - ../../:/app
       - /app/node_modules
     environment:
       - NODE_ENV=${NODE_ENV:-development}
