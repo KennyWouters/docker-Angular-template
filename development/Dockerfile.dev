@@ -1,0 +1,56 @@
+# Define build arguments
+ARG NODE_VERSION=20-alpine
+
+FROM node:${NODE_VERSION}
+
+# Install git and other development tools
+RUN apk update && \
+    apk add --no-cache \
+    git \
+    curl \
+    bash \
+    openssh-client \
+    shadow
+
+WORKDIR /app
+
+# Copy package files first
+COPY package*.json ./
+
+# Check if package.json exists and install dependencies
+RUN if [ -f package.json ]; then \
+        npm install; \
+    else \
+        echo "package.json not found. Please ensure it exists in the project root."; \
+        exit 1; \
+    fi
+
+# Copy source code
+COPY . .
+
+# Expose development port
+EXPOSE ${DEV_PORT:-3000}
+
+# Set up git configuration
+RUN git config --global core.fileMode false
+
+# Create or update development user
+RUN if getent group ${DEV_GROUP:-node}; then \
+        echo "Group ${DEV_GROUP:-node} already exists"; \
+    else \
+        addgroup -g ${DEV_GID:-1000} ${DEV_GROUP:-node}; \
+    fi && \
+    if getent passwd ${DEV_USER:-node}; then \
+        echo "User ${DEV_USER:-node} already exists"; \
+    else \
+        adduser -D -u ${DEV_UID:-1000} -G ${DEV_GROUP:-node} ${DEV_USER:-node}; \
+    fi
+
+# Set proper permissions
+RUN chown -R ${DEV_USER:-node}:${DEV_GROUP:-node} /app
+
+# Switch to development user
+USER ${DEV_USER:-node}
+
+# Start development server with hot reload
+CMD ["npm", "start", "--", "--host", "${DEV_HOST:-0.0.0.0}", "--port", "${DEV_PORT:-3000}", "--poll", "${DEV_POLL:-2000}"] 

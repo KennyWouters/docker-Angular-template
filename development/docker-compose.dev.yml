@@ -1,0 +1,24 @@
+services:
+  # Development service with hot-reloading
+  ${APP_NAME}-dev:
+    build: 
+      context: ../..
+      dockerfile: docker/development/Dockerfile.dev
+    ports:
+      - "${DEV_PORT:-3000}:${DEV_PORT:-3000}"
+    volumes:
+      - ../..:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - APP_ENV=${APP_ENV:-development}
+      - GIT_BRANCH=${GIT_BRANCH:-dev}
+    command: >
+      sh -c "
+        if [ -d .git ]; then
+          git checkout ${GIT_BRANCH:-dev} || true;
+          if git remote | grep -q '^origin$'; then
+            git pull origin ${GIT_BRANCH:-dev} || true;
+          fi;
+        fi &&
+        npm start -- --host ${DEV_HOST:-0.0.0.0} --port ${DEV_PORT:-3000} --poll ${DEV_POLL:-2000}" 
