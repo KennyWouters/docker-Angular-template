@@ -34,7 +34,7 @@ RUN if getent group ${NGINX_GROUP:-nginx}; then \
 COPY --from=build /app/dist/*/browser /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker-front/production/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Set proper permissions
 RUN chown -R ${NGINX_USER:-nginx}:${NGINX_GROUP:-nginx} /usr/share/nginx/html && \

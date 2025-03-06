@@ -2,15 +2,15 @@
 Write-Host "Loading docker commands script..."
 Write-Host "Script location: $PSScriptRoot"
 
-# Get the project root directory (three levels up from this script)
-$projectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+# Get the project root directory (one level up from this script)
+$projectRoot = Split-Path -Parent $PSScriptRoot
 Write-Host "Project root: $projectRoot"
 
 # Default values
-$devEnvFile = Join-Path $projectRoot "untitled2\docker-front\config\.env.dev"
-$devComposeFile = Join-Path $projectRoot "untitled2\docker-front\development\docker-compose.dev.yml"
-$prodEnvFile = Join-Path $projectRoot "adhan-front\docker\config\.env.prod"
-$prodComposeFile = Join-Path $projectRoot "adhan-front\docker\production\docker-compose.yml"
+$devEnvFile = Join-Path $projectRoot "config\.env.dev"
+$devComposeFile = Join-Path $projectRoot "development\docker-compose.dev.yml"
+$prodEnvFile = Join-Path $projectRoot "config\.env.prod"
+$prodComposeFile = Join-Path $projectRoot "production\docker-compose.yml"
 
 # Development commands
 function Start-Dev {

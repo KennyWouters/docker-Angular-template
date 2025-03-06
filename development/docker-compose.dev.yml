@@ -1,6 +1,7 @@
 services:
   # Development service with hot-reloading
-  app-dev:
+  dev:
+    container_name: "${APP_NAME}-dev"
     build: 
       context: ../../
       dockerfile: docker-front/development/Dockerfile.dev
