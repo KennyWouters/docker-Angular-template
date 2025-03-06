@@ -1,6 +1,6 @@
 # Docker Setup
 
-This directory contains all Docker-related configurations for the Adhan Front application. The structure is organized to separate development and production environments, along with their respective configurations and scripts.
+This directory contains all Docker-related configurations for the app Frontend application. The structure is organized to separate development and production environments, along with their respective configurations and scripts.
 
 ## Directory Structure
 
